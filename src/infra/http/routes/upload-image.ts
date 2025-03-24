@@ -8,19 +8,21 @@ export const uploadImageRoute: FastifyPluginAsyncZod = async server => {
     '/uploads',
     {
       schema: {
-        summary: "Upload an image",
+        summary: 'Upload an image',
         consumes: ['multipart/form-data'],
         response: {
           201: z.object({ url: z.string() }),
           400: z.object({ message: z.string() }),
-          409: z.object({ message: z.string() }).describe('Upload already exists.'),
-        }
-      }
+          409: z
+            .object({ message: z.string() })
+            .describe('Upload already exists.'),
+        },
+      },
     },
     async (request, response) => {
       const uploadedFile = await request.file({
         limits: {
-          fileSize: 1024 * 1024 * 5, // 5MB
+          fileSize: 1024 * 1024 * 2, // 2MB
         },
       })
 
@@ -34,8 +36,15 @@ export const uploadImageRoute: FastifyPluginAsyncZod = async server => {
         contentStream: uploadedFile.file,
       })
 
+      if (uploadedFile.file.truncated) {
+        return response
+          .status(400)
+          .send({ message: 'File size limit exceeded.' })
+      }
+
       if (isSuccess(result)) {
-        return response.status(201).send({ url: 'teste.com' })
+        const { url } = unwrapEither(result)
+        return response.status(201).send({ url })
       }
 
       const error = unwrapEither(result)
@@ -44,5 +53,6 @@ export const uploadImageRoute: FastifyPluginAsyncZod = async server => {
         case 'InvalidFileFormatError':
           return response.status(400).send({ message: error.message })
       }
-    })
+    }
+  )
 }
