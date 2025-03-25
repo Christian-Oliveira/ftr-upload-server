@@ -1,8 +1,8 @@
 import { Readable } from 'node:stream'
 import { db } from '@/infra/db'
 import { schema } from '@/infra/db/schemas'
+import { type Either, makeError, makeSuccess } from '@/infra/shared/either'
 import { uploadFileToStorage } from '@/infra/storage/upload-file-to-storage'
-import { type Either, makeError, makeSuccess } from '@/shared/either'
 import { z } from 'zod'
 import { InvalidFileFormatError } from './errors/invalid-file-format'
 
