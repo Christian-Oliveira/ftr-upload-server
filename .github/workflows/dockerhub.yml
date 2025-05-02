@@ -33,4 +33,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ vars.ECR_REPOSITORY }}:${{ steps.generate-tag.outputs.sha }}
+          tags: ${{ vars.DOCKERHUB_REPOSITORY }}:${{ steps.generate-tag.outputs.sha }}
