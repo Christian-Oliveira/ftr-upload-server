@@ -55,13 +55,13 @@ jobs:
           context: .
           load: true
           tags: |
-            ${{steps.login-ecr.outputs.registry}}/${{ vars.ECR_REPOSITORY }}:test
+            ${{steps.login-aws-ecr.outputs.registry}}/${{ vars.ECR_REPOSITORY }}:test
 
       - name: Run Trivy scanner
         id: run-trivy-scanner
         uses: aquasecurity/trivy-action@0.30.0
         with:
-          image-ref: "${{steps.login-ecr.outputs.registry}}/${{ vars.ECR_REPOSITORY }}:test"
+          image-ref: "${{steps.login-aws-ecr.outputs.registry}}/${{ vars.ECR_REPOSITORY }}:test"
           format: "table"
           ignore-unfixed: true
           vuln-type: "os,library"
