@@ -63,7 +63,8 @@ jobs:
         with:
           image-ref: "${{steps.login-aws-ecr.outputs.registry}}/${{ vars.ECR_REPOSITORY }}:test"
           format: "table"
-          ignore-unfixed: false
+          exit-code: 1
+          ignore-unfixed: true
           vuln-type: "os,library"
           severity: "CRITICAL,HIGH,MEDIUM,LOW"
 
